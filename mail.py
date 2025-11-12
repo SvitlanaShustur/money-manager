@@ -54,11 +54,12 @@ def save_to_file(shopping_list):
             f.write(f"{i}). {item["name"]} - {item["quantity"]} x {item["price"]}€\n")
     print("✅ Shopping_list saved to text.txt")
 
-def load_from_fike():
+def load_from_file():
     shopping_list = []
     with open("text.txt", "r", encoding="utf-8") as f:
         for line in f:
-            line_list = line.strip()[:1].split()
+            line_list = line.strip()[:-1].split()
+            # print(line_list)
             # for i in range(1, len(line_list), 2):
             name, quantity, price = line_list[1], line_list[3], line_list[5]
             item = {
@@ -67,11 +68,9 @@ def load_from_fike():
                     "price": float(price)
                 }
             shopping_list.append(item)
+    print("✅ Load  file")        
     return shopping_list
-            
-        
-
-
+               
 def main():
     print("🛒 Вітаю у менеджері покупок! Меню:")
     shopping_list = []
@@ -89,27 +88,33 @@ def main():
         
         try: 
             choice = int(input("Ваш вибір: "))
-
-            match choice:
-                case 1:
-                    try:
-                        add_item(shopping_list)
-                    except:
-                        print("Error")
-                case 2:
-                    show_list(shopping_list)
-                case 3:
-                    count_total(shopping_list)
-                case 4:
-                    save_to_file(shopping_list)
-                case 5:
-                    load_from_fike()
-                case 6:
-                    print("See you!!")
-                    break
-                case _:
-                    print("Error! Enter number 1-6!")
         except ValueError:
             print("Enter number 1-6!!")
+            continue   
+        match choice:
+            case 1:
+                try:
+                    add_item(shopping_list)
+                # except:
+                    # print("Error")
+                except Exception as e:
+                    print(f"Your errer: {e}")
+            case 2:
+                show_list(shopping_list)
+            case 3:
+                count_total(shopping_list)
+            case 4:
+                save_to_file(shopping_list)
+            case 5:
+                try:
+                    shopping_list = load_from_file()
+                except FileNotFoundError:
+                    print("File Not Found Error")
+            case 6:
+                print("See you!!")
+                break
+            case _:
+                print("Error! Enter number 1-6!")
+
 if __name__ == "__main__":
     main()
